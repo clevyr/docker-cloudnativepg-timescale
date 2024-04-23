@@ -87,3 +87,14 @@ jobs:
             TIMESCALE_VERSION=${{ steps.timescale.outputs.version }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+  # Summarize matrix https://github.community/t/status-check-for-a-matrix-jobs/127354/7
+  build-success:
+    name: Build Successful
+    runs-on: ubuntu-latest
+    needs: build
+    if: ${{ always() }}
+    steps:
+      - if: ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}
+        name: Check matrix status
+        run: exit 1
