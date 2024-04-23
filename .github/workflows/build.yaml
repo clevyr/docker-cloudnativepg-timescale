@@ -1,0 +1,89 @@
+name: Build
+
+on: push
+
+env:
+  # renovate datasource=github-releases depName=timescale/timescaledb
+  TIMESCALE_VERSION: 2.14.2
+
+jobs:
+  build:
+    name: Build Image (pg${{ matrix.postgres_version }})
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      matrix:
+        include:
+          - postgres_version: "16"
+            # renovate datasource=docker depName=ghcr.io/cloudnative-pg/postgresql
+            cnpg_version: 16.2-7
+            latest: "true"
+          - postgres_version: "15"
+            # renovate datasource=docker depName=ghcr.io/cloudnative-pg/postgresql
+            cnpg_version: 15.6-6
+          - postgres_version: "14"
+            # renovate datasource=docker depName=ghcr.io/cloudnative-pg/postgresql
+            cnpg_version: 14.11-6
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Get CloudNativePG version
+        id: cnpg
+        env:
+          VERSION: ${{ matrix.cnpg_version }}
+        run: |
+          {
+            echo "version=$VERSION"
+            echo "minor=$(cut -d- -f1 <<<"$VERSION")"
+            echo "major=$(cut -d. -f1 <<<"$VERSION")"
+          } >> $GITHUB_OUTPUT
+      - name: Get Timescale version
+        id: timescale
+        run: |
+          {
+            echo "version=$TIMESCALE_VERSION"
+            echo "minor=$(cut -d. -f-2 <<<"$TIMESCALE_VERSION")"
+            echo "major=$(cut -d. -f1 <<<"$TIMESCALE_VERSION")"
+          } >> $GITHUB_OUTPUT
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ghcr.io/${{ github.repository_owner }}/cloudnativepg-timescale
+          flavor: latest=false
+          tags: |
+            type=raw,priority=1000,value=latest,enable=${{ matrix.latest || 'false' }}
+            type=raw,priority=999,value=${{ steps.cnpg.outputs.version }}-ts${{ steps.timescale.outputs.version }}
+            type=raw,priority=998,value=${{ steps.cnpg.outputs.minor }}-ts${{ steps.timescale.outputs.minor }}
+            type=raw,priority=997,value=${{ steps.cnpg.outputs.major }}-ts${{ steps.timescale.outputs.major }}
+            type=raw,priority=996,value=${{ steps.cnpg.outputs.version }}
+            type=raw,priority=995,value=${{ steps.cnpg.outputs.minor }}
+            type=raw,priority=994,value=${{ steps.cnpg.outputs.major }}
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+      - name: Build and Push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          pull: true
+          push: ${{ github.ref_name == 'main' }}
+          platforms: linux/amd64,linux/arm64/v8
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            POSTGRES_VERSION=${{ matrix.postgres_version }}
+            CLOUDNATIVEPG_VERSION=${{ steps.cnpg.outputs.version }}
+            TIMESCALE_VERSION=${{ steps.timescale.outputs.version }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

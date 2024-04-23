@@ -1,0 +1,28 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "local>clevyr/renovate-config-public",
+    ":automergeAll"
+  ],
+  "regexManagers": [
+    {
+      "fileMatch": ["\\.ya?ml$"],
+      "matchStrings": [
+        "# ?renovate datasource=(?<datasource>.+?) depName=(?<depName>.+)\\n.+: [\"']?(?<currentValue>.+?)[\"']?\\n"
+      ]
+    },
+    {
+      "fileMatch": ["README.md"],
+      "matchStrings": [
+        "<!--renovate datasource=(?<datasource>.+?) repo=(?<depName>.+) -->\\n.*\\/Version-(?<currentValue>.+?)-"
+      ]
+    }
+  ],
+  "packageRules": [
+    {
+      "matchDepNames": ["ghcr.io/cloudnative-pg/postgresql"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    }
+  ]
+}
