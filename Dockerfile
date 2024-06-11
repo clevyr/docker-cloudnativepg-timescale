@@ -1,4 +1,4 @@
-#syntax=docker/dockerfile:1.7
+#syntax=docker/dockerfile:1.8
 
 ARG CLOUDNATIVEPG_VERSION
 
