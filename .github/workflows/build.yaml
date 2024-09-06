@@ -25,7 +25,7 @@ jobs:
             cnpg_version: 15.7-6
           - postgres_version: "14"
             # renovate datasource=docker depName=ghcr.io/cloudnative-pg/postgresql
-            cnpg_version: 14.12-6
+            cnpg_version: 14.13-6
     steps:
       - name: Checkout
         uses: actions/checkout@v4
