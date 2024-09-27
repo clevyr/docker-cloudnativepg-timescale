@@ -1,6 +1,6 @@
 # CloudNativePG Containers with TimescaleDB
 
-[![Build](https://github.com/clevyr/docker-cloudnativepg-timescale/actions/workflows/build.yaml/badge.svg)](https://github.com/clevyr/docker-cloudnativepg-timescale/actions/workflows/build.yaml)
+[![Build](https://github.com/fashionunited/docker-cloudnativepg-timescale/actions/workflows/build.yaml/badge.svg)](https://github.com/fashionunited/docker-cloudnativepg-timescale/actions/workflows/build.yaml)
 
 This repo builds Docker images for [CloudNativePG](https://cloudnative-pg.io/) with the [TimescaleDB](https://timescale.com) extension installed.
 
@@ -8,7 +8,7 @@ Both versions are automatically updated by Renovate bot, so new releases will be
 
 ## Images
 
-Images are available at [`ghcr.io/clevyr/cloudnativepg-timescale`](https://github.com/clevyr/docker-cloudnativepg-timescale/pkgs/container/cloudnativepg-timescale). There are tags available for Postgres v14, v15, and v16.
+Images are available at [`ghcr.io/fashionunited/cloudnativepg-timescale`](https://github.com/fashionunited/docker-cloudnativepg-timescale/pkgs/container/cloudnativepg-timescale). There are tags available for Postgres v14, v15, and v16.
 
 ## Deployment
 
@@ -22,7 +22,7 @@ metadata:
   name: example
 spec:
   instances: 3
-  imageName: ghcr.io/clevyr/cloudnativepg-timescale:16-ts2
+  imageName: ghcr.io/fashionunited/cloudnativepg-timescale:16-ts2
   postgresql:
     shared_preload_libraries:
       - timescaledb
