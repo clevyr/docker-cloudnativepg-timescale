@@ -22,7 +22,8 @@
     {
       "matchDatasources": ["docker"],
       "matchPackageNames": ["ghcr.io/cloudnative-pg/postgresql"],
-      "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)-(?<build>\\d+)$"
+      "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)-(?<build>\\d+)$",
+      "groupName": "ghcr.io/cloudnative-pg/postgresql"
     },
     {
       "matchDatasources": ["docker"],
