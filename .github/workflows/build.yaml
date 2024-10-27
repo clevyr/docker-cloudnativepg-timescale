@@ -4,7 +4,7 @@ on: push
 
 env:
   # renovate datasource=github-releases depName=timescale/timescaledb
-  TIMESCALE_VERSION: 2.16.1
+  TIMESCALE_VERSION: 2.17.1
 
   # renovate datasource=github-releases depName=timescale/timescaledb-toolkit
   TIMESCALE_TOOLKIT_VERSION: 1.18.0
