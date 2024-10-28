@@ -20,7 +20,14 @@
   ],
   "packageRules": [
     {
-      "matchDepNames": ["ghcr.io/cloudnative-pg/postgresql"],
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["ghcr.io/cloudnative-pg/postgresql"],
+      "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)-(?<build>\\d+)$",
+      "groupName": "ghcr.io/cloudnative-pg/postgresql docker tag"
+    },
+    {
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["ghcr.io/cloudnative-pg/postgresql"],
       "matchUpdateTypes": ["major"],
       "enabled": false
     }
