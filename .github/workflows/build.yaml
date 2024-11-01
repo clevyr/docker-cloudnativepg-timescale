@@ -18,17 +18,17 @@ jobs:
         include:
           - postgres_version: "17"
             # renovate datasource=docker depName=ghcr.io/cloudnative-pg/postgresql
-            cnpg_version: 17.0-26
+            cnpg_version: 17.0-27
             latest: "true"
           - postgres_version: "16"
             # renovate datasource=docker depName=ghcr.io/cloudnative-pg/postgresql
-            cnpg_version: 16.4-49
+            cnpg_version: 16.4-50
           - postgres_version: "15"
             # renovate datasource=docker depName=ghcr.io/cloudnative-pg/postgresql
-            cnpg_version: 15.8-48
+            cnpg_version: 15.8-49
           - postgres_version: "14"
             # renovate datasource=docker depName=ghcr.io/cloudnative-pg/postgresql
-            cnpg_version: 14.13-48
+            cnpg_version: 14.13-49
     steps:
       - name: Checkout
         uses: actions/checkout@v4
