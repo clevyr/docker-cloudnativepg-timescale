@@ -4,7 +4,7 @@ on: push
 
 env:
   # renovate datasource=github-releases depName=timescale/timescaledb
-  TIMESCALE_VERSION: 2.19.3
+  TIMESCALE_VERSION: 2.20.2
 
 jobs:
   build:
