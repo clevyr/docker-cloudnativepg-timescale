@@ -6,6 +6,9 @@ env:
   # renovate datasource=github-releases depName=timescale/timescaledb
   TIMESCALE_VERSION: 2.19.3
 
+  # renovate datasource=github-releases depName=timescale/timescaledb-toolkit
+  TIMESCALE_TOOLKIT_VERSION: 1.18.0
+
 jobs:
   build:
     name: Build Image (pg${{ matrix.postgres_version }})
@@ -50,6 +53,14 @@ jobs:
             echo "minor=$(cut -d. -f-2 <<<"$TIMESCALE_VERSION")"
             echo "major=$(cut -d. -f1 <<<"$TIMESCALE_VERSION")"
           } >> $GITHUB_OUTPUT
+      - name: Get Timescale Toolkit version
+        id: timescale_toolkit
+        run: |
+          {
+            echo "version=$TIMESCALE_TOOLKIT_VERSION"
+            echo "minor=$(cut -d. -f-2 <<<"$TIMESCALE_TOOLKIT_VERSION")"
+            echo "major=$(cut -d. -f1 <<<"$TIMESCALE_TOOLKIT_VERSION")"
+          } >> $GITHUB_OUTPUT
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5.10.0
@@ -81,13 +92,14 @@ jobs:
           context: .
           pull: true
           push: ${{ github.ref_name == 'main' }}
-          platforms: linux/amd64,linux/arm64/v8
+          platforms: linux/amd64
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             POSTGRES_VERSION=${{ matrix.postgres_version }}
             CLOUDNATIVEPG_VERSION=${{ steps.cnpg.outputs.version }}
             TIMESCALE_VERSION=${{ steps.timescale.outputs.version }}
+            TIMESCALE_TOOLKIT_VERSION=${{ steps.timescale_toolkit.outputs.version }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
