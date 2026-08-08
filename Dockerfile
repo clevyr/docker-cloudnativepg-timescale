@@ -7,6 +7,7 @@ USER root
 
 ARG POSTGRES_VERSION
 ARG TIMESCALE_VERSION
+ARG TIMESCALE_TOOLKIT_VERSION
 RUN <<EOT
   set -eux
 
@@ -22,6 +23,10 @@ RUN <<EOT
   # Install Timescale
   apt-get update
   apt-get install -y --no-install-recommends "timescaledb-2-postgresql-$POSTGRES_VERSION=$TIMESCALE_VERSION~debian$VERSION_ID"
+
+  # Install Timescale Toolkit
+  apt-get update
+  apt-get install -y --no-install-recommends "timescaledb-toolkit-postgresql-$POSTGRES_VERSION=1:$TIMESCALE_TOOLKIT_VERSION~debian$VERSION_ID"
 
   # Cleanup
   apt-get purge -y curl
